@@ -2,8 +2,10 @@ const express = require("express");
 const app = express();
 const { connectMQTT, sendMessage } = require("./mqtt");
 const orders = require('./orderStore'); // or same file export
+const cors = require('cors');
 require('./mqttListener');
 
+app.use(cors('*'));
 app.use(express.json());
 
 // ---- CONFIG ----
