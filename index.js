@@ -36,7 +36,7 @@ app.post(
       txn_id,
       amount,
       items,
-      status: "PENDING",
+      status: "FAILED",
       createdAt: new Date()
     };
 
