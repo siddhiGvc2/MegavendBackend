@@ -45,7 +45,7 @@ app.post(
 
     console.log(`Order ${txn_id} created for machine ${machineId}`,orders[txn_id]);
 
-    sendMessage(`HB/${machineId}`, payload = `*VEND,${txn_id},PAYTM,${parseInt(amount/100)},${txn_id}#`);
+    sendMessage(`HB/${machineId}`, payload = `*VEND,${txn_id},PAYTM,${parseInt(amount*100)},${txn_id}#`);
 
     setTimeout(() => {
             console.log('Simulating order success for', txn_id,orders[txn_id].status);
