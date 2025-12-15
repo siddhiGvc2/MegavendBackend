@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const { connectMQTT, sendMessage } = require("./mqtt");
 const orders = require('./orderStore'); // or same file export
+require('./mqttListener');
 
 app.use(express.json());
 
@@ -39,6 +40,7 @@ app.post(
       status: "FAILED",
       createdAt: new Date()
     };
+    console.log(`Order ${txn_id} created for machine ${machineId}`,orders[txn_id]);
 
     sendMessage(`HB/${machineId}`, payload = `*VEND,${txn_id},PAYTM,${parseInt(amount/100)},${txn_id}#`);
 

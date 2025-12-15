@@ -1,4 +1,5 @@
 const mqtt = require('mqtt');
+const EventEmitter = require('events');
 
 const MQTT_BROKER_URL = 'mqtt://165.232.180.111';
 const MQTT_USERNAME = 'gvcMqttServer';
@@ -6,6 +7,7 @@ const MQTT_PASSWORD = 'gvcMqttServer';
 
 const MQTT_TOPIC = 'HB/ALL';
 
+const mqttEvents = new EventEmitter();
 let mqttClient = null;
 let messageHandler = null;
 
@@ -34,10 +36,8 @@ function connectMQTT() {
   });
 
   mqttClient.on('message', (topic, message) => {
-    console.log(`Received from ${topic}:`, message.toString());
-     if (messageHandler) {
-      messageHandler(topic, message.toString());
-    }
+    // console.log(`Received from ${topic}:`, message.toString());
+     mqttEvents.emit('message', topic, message.toString());
   });
 
   return mqttClient;
@@ -83,9 +83,6 @@ function sendMessage(topic, payload) {
 }
 
 
-function onMessage(handler) {
-  messageHandler = handler;
-}
 /**
  * Disconnect MQTT
  */
@@ -102,5 +99,5 @@ module.exports = {
   subscribe,
   sendMessage,
   disconnectMQTT,
-  onMessage
+  mqttEvents
 };
