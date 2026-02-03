@@ -81,7 +81,7 @@ app.get(
 );
 
 // ---- START SERVER ----
-const PORT = 3000;
+const PORT = 9090;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   connectMQTT();

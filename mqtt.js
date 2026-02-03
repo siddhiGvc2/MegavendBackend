@@ -1,11 +1,15 @@
 const mqtt = require('mqtt');
 const EventEmitter = require('events');
+const fs=require('fs');
 
-const MQTT_BROKER_URL = 'mqtt://165.232.180.111';
-const MQTT_USERNAME = 'gvcMqttServer';
-const MQTT_PASSWORD = 'gvcMqttServer';
+const MQTT_BROKER_URL = 'mqtts://gvcsystems.com';
+const MQTT_USERNAME = 'gvcsystems';
+const MQTT_PASSWORD = 'vkbd@070361M';
 
 const MQTT_TOPIC = 'HB/ALL';
+
+const caCert = fs.readFileSync('./ca.crt');
+
 
 const mqttEvents = new EventEmitter();
 let mqttClient = null;
@@ -21,10 +25,15 @@ function connectMQTT() {
   }
 
   mqttClient = mqtt.connect(MQTT_BROKER_URL, {
-    username: MQTT_USERNAME,
-    password: MQTT_PASSWORD,
-    reconnectPeriod: 5000,
-  });
+      username: MQTT_USERNAME,
+      password: MQTT_PASSWORD,
+      ca: caCert,
+      protocol: 'mqtts',
+      rejectUnauthorized: true, // IMPORTANT
+      keepalive: 60,
+      reconnectPeriod: 5000,
+    });
+
 
   mqttClient.on('connect', () => {
     console.log('Connected to MQTT broker');
