@@ -2,9 +2,9 @@ const mqtt = require('mqtt');
 const EventEmitter = require('events');
 const fs=require('fs');
 
-const MQTT_BROKER_URL = 'mqtts://gvcsystems.com';
-const MQTT_USERNAME = 'gvcsystems';
-const MQTT_PASSWORD = 'vkbd@070361M';
+const MQTT_BROKER_URL = 'mqtts://megavend.in';
+const MQTT_USERNAME= 'megavend';
+const MQTT_PASSWORD = 'megavend@123';
 
 const MQTT_TOPIC = 'HB/ALL';
 
