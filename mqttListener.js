@@ -1,5 +1,5 @@
 const { mqttEvents, sendMessage } = require('./mqtt');
-const orders = require('./orderStore');
+const {orders,deviceStatus} = require('./orderStore');
 
 mqttEvents.on('message', (topic, message) => {
   console.log('MQTT RX:', topic, message);
@@ -11,6 +11,9 @@ mqttEvents.on('message', (topic, message) => {
   const [machineId, txn_id, amountReceived] = payload.split(',');
   console.log('Parsed MQTT message:', { machineId, txn_id, amountReceived });
   console.log('Current', orders);
+   if(machineId){
+    deviceStatus[machineId] = new Date().toISOString();
+  }
   if (!orders[txn_id]) return;
   if(orders[txn_id].status === 'SUCCESS') return;
 
