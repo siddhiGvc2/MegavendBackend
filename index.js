@@ -120,8 +120,7 @@ app.get(
 
     if (!transaction) {
       return res.json({
-        txn_id: txnId,
-        status: "NOT_FOUND"
+        detail: "Transaction not found"
       });
     }
     const { items, ...transactionWithoutItems } = transaction;
