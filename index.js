@@ -31,22 +31,14 @@ app.post(
     const { machineId } = req.params;
    
     const { txn_id, amount, items } = req.body;
-      sendMessage(
-      `HB/${machineId}`,
-      `*VEND,${txn_id},PAYTM,${amount},${txn_id}#`
-    );
+      //sendMessage(
+      //`HB/${machineId}`,
+      //`*FW?#`
+    //);
     const webhookUrl = req.header("Webhook-Url"); // optional
     
-    setTimeout(()=>{
-     if(!deviceStatus[machineId])
-    {
-        return res.status(200).json({
-        tid: txn_id,
-        machine_id: machineId,
-        status: "inactive"
-      });
-    }
-   
+   // setTimeout(()=>{
+  
 
     // ---- Validation ----
     if (!txn_id || !amount || !items) {
@@ -102,17 +94,17 @@ app.post(
         status: Math.random() > 0.3 ? 1 : 0
       }));
 
-      orders[txn_id].status = "completed";
+      orders[txn_id].status = "pending";
       orders[txn_id].spiral_statuses = spiralStatuses;
 
       return res.status(200).json({
         tid: txn_id,
         machine_id: machineId,
-        status: "completed",
+        status: "pending",
         spiral_statuses: spiralStatuses
       });
     }, 4000);
-     },2000);
+    // },2000);
 
   }
 );
@@ -143,7 +135,7 @@ app.get(
 
 // ---- GET Device STATUS ----
 app.get(
-  "/api/v1/deviceStatus/:txnId",
+  "/api/v1/machines/:txnId/status",
   apiKeyAuth,
   (req, res) => {
      const { txnId } = req.params;
@@ -151,18 +143,12 @@ app.get(
       let status="ONLINE";
       if (!lastHeartBeatTime) {
       status="OFFLINE";
-      return res.json({
-        txn_id: txnId,
-        status: "OFFLINE"
-      });
+    
     }
     
     if(lastHeartBeatTime < new Date(Date.now() - 5 * 60 * 1000).toISOString()){
       status="OFFLINE";
-      return res.json({
-        txn_id: txnId,
-        status: "OFFLINE"
-      });
+     
     }
     else {
   return res.json({

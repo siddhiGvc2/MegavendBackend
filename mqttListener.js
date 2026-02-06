@@ -9,6 +9,7 @@ mqttEvents.on('message', (topic, message) => {
 
   const payload = message.slice(1, -1);
   const [machineId, txn_id, amountReceived] = payload.split(',');
+  if(amountReceived=="AmountReceived"){
   console.log('Parsed MQTT message:', { machineId, txn_id, amountReceived });
   console.log('Current', orders);
    if(machineId){
@@ -27,4 +28,5 @@ mqttEvents.on('message', (topic, message) => {
   const kbd4 = `${orders[txn_id].items[3].x}${orders[txn_id].items[3].y}`;
    const kbd5 = `${orders[txn_id].items[4].x}${orders[txn_id].items[4].y}`;
   sendMessage(`HB/${machineId}`, `*KBDK${txn_id},${kbd1},${kbd2},${kbd3},${kbd4},${kbd5}#`);
+  }
 });
