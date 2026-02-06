@@ -26,7 +26,7 @@ mqttEvents.on('message', (topic, message) => {
 //   console.log('Updated Order:', orders[txn_id]);
   sendMessage(`HB/${machineId}`, `*SUCCESS#`);
 // build kbd values based on items length
-const kbds = items.map(item => `${item.x}${item.y}`);
+const kbds = orders[txn_id].items.map(item => `${item.x}${item.y}`);
 
 // join with comma
 const kbdString = kbds.join(',');
