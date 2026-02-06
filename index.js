@@ -59,7 +59,7 @@ app.post(
       tid: txn_id,
       machineId,
       items,
-      status: "pending",
+      status: "failed",
       createdAt: new Date(),
       webhookUrl
     };
@@ -87,7 +87,8 @@ app.post(
     // ==========================
     setTimeout(() => {
       // simulate spiral results
-      if(orders[txn_id].status === 'SUCCESS'){
+      console.log('Current Order Status before update:', orders[txn_id]);
+      if(orders[txn_id].status == "pending"){
       const spiralStatuses = items.map((item) => ({
         x: item.x,
         y: item.y,
@@ -111,10 +112,11 @@ app.post(
           status: "failed"
         });
       }
-    }, 6000);
+      
+    }, 8000);
     // },2000);
-
   }
+  
 );
 
 
