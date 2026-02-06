@@ -9,6 +9,9 @@ mqttEvents.on('message', (topic, message) => {
 
   const payload = message.slice(1, -1);
   const [machineId, txn_id, amountReceived] = payload.split(',');
+   if(machineId){
+    deviceStatus[machineId] = new Date().toISOString();
+  }
   if(amountReceived=="AmountReceived"){
   console.log('Parsed MQTT message:', { machineId, txn_id, amountReceived });
   console.log('Current', orders);
@@ -22,11 +25,15 @@ mqttEvents.on('message', (topic, message) => {
   console.log(`Order ${txn_id} updated to SUCCESS`);
 //   console.log('Updated Order:', orders[txn_id]);
   sendMessage(`HB/${machineId}`, `*SUCCESS#`);
-  const kbd1 = `${orders[txn_id].items[0].x}${orders[txn_id].items[0].y}`;
-  const kbd2 = `${orders[txn_id].items[1].x}${orders[txn_id].items[1].y}`;
-  const kbd3 = `${orders[txn_id].items[2].x}${orders[txn_id].items[2].y}`;
-  const kbd4 = `${orders[txn_id].items[3].x}${orders[txn_id].items[3].y}`;
-   const kbd5 = `${orders[txn_id].items[4].x}${orders[txn_id].items[4].y}`;
-  sendMessage(`HB/${machineId}`, `*KBDK${txn_id},${kbd1},${kbd2},${kbd3},${kbd4},${kbd5}#`);
+// build kbd values based on items length
+const kbds = items.map(item => `${item.x}${item.y}`);
+
+// join with comma
+const kbdString = kbds.join(',');
+
+sendMessage(
+  `HB/${machineId}`,
+  `*KBDK${txn_id},${kbdString}#`
+);
   }
 });

@@ -30,7 +30,7 @@ app.post(
   async (req, res) => {
     const { machineId } = req.params;
    
-    const { txn_id, amount, items } = req.body;
+    const { txn_id,  items } = req.body;
       //sendMessage(
       //`HB/${machineId}`,
       //`*FW?#`
@@ -41,7 +41,7 @@ app.post(
   
 
     // ---- Validation ----
-    if (!txn_id || !amount || !items) {
+    if (!txn_id || !items) {
       return res.status(400).json({
         error: "Missing or invalid request parameters"
       });
@@ -58,7 +58,6 @@ app.post(
     orders[txn_id] = {
       tid: txn_id,
       machineId,
-      amount,
       items,
       status: "pending",
       createdAt: new Date(),
@@ -68,7 +67,7 @@ app.post(
     // ---- SEND MQTT VEND COMMAND ----
     sendMessage(
       `HB/${machineId}`,
-      `*VEND,${txn_id},PAYTM,${amount},${txn_id}#`
+      `*VEND,${txn_id},PAYTM,${items.length*100},${txn_id}#`
     );
 
     // ==========================
@@ -155,7 +154,7 @@ app.get(
     success: true,
     is_online: status == "ONLINE" ? true : false,
     status: status == "ONLINE" ? "active" : "inactive",
-    last_heartbeat_at: lastHeartBeatTime
+    last_heartbeat_at: lastHeartBeatTime || null
   });
 }
 
