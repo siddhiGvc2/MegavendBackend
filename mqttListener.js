@@ -18,7 +18,7 @@ mqttEvents.on('message', (topic, message) => {
         y: item.y,
         status: payload[i+3] === '1' ? 1 : 0
       }));
-      orders[payload[2]].status = "pending";
+      orders[payload[2]].status = "completed";
       orders[payload[2]].spiral_statuses = spiralStatuses;
     }
   }

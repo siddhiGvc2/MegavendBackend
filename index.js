@@ -105,6 +105,15 @@ app.post(
         spiral_statuses: spiralStatuses
       });
       }
+      else if(orders[txn_id].status == "completed")
+        {
+           return res.status(200).json({
+        tid: txn_id,
+        machine_id: machineId,
+        status: "completed",
+        spiral_statuses: orders[txn_id].spiral_statuses
+         });
+        }
       else{
         return res.status(200).json({
           tid: txn_id,
