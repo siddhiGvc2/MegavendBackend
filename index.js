@@ -29,9 +29,15 @@ app.post(
   apiKeyAuth,
   async (req, res) => {
     const { machineId } = req.params;
+   
     const { txn_id, amount, items } = req.body;
+      sendMessage(
+      `HB/${machineId}`,
+      `*VEND,${txn_id},PAYTM,${amount},${txn_id}#`
+    );
     const webhookUrl = req.header("Webhook-Url"); // optional
     
+    setTimeout(()=>{
      if(!deviceStatus[machineId])
     {
         return res.status(200).json({
@@ -40,7 +46,7 @@ app.post(
         status: "inactive"
       });
     }
-
+   
 
     // ---- Validation ----
     if (!txn_id || !amount || !items) {
@@ -106,6 +112,8 @@ app.post(
         spiral_statuses: spiralStatuses
       });
     }, 4000);
+     },2000);
+
   }
 );
 
