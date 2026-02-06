@@ -13,6 +13,7 @@ mqttEvents.on('message', (topic, message) => {
     deviceStatus[machineId] = new Date().toISOString();
   }
   if(amountReceived == "KBDKReceived"){
+     orders[txn_id].status = 'SUCCESS';
      const spiralStatuses = orders[txn_id].items.map((item) => ({
         x: item.x,
         y: item.y,
@@ -31,7 +32,7 @@ mqttEvents.on('message', (topic, message) => {
   if (!orders[txn_id]) return;
   if(orders[txn_id].status === 'SUCCESS') return;
 
-  orders[txn_id].status = 'SUCCESS';
+ 
   console.log(`Order ${txn_id} updated to SUCCESS`);
 //   console.log('Updated Order:', orders[txn_id]);
   sendMessage(`HB/${machineId}`, `*SUCCESS#`);

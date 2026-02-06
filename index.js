@@ -87,6 +87,7 @@ app.post(
     // ==========================
     setTimeout(() => {
       // simulate spiral results
+      if(orders[txn_id].status === 'SUCCESS'){
       const spiralStatuses = items.map((item) => ({
         x: item.x,
         y: item.y,
@@ -102,7 +103,15 @@ app.post(
         status: "pending",
         spiral_statuses: spiralStatuses
       });
-    }, 4000);
+      }
+      else{
+        return res.status(200).json({
+          tid: txn_id,
+          machine_id: machineId,
+          status: "failed"
+        });
+      }
+    }, 6000);
     // },2000);
 
   }
