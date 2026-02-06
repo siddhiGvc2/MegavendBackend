@@ -90,7 +90,7 @@ app.post(
       const spiralStatuses = items.map((item) => ({
         x: item.x,
         y: item.y,
-        status: Math.random() > 0.3 ? 1 : 0
+        status: 0
       }));
 
       orders[txn_id].status = "pending";

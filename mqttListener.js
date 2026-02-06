@@ -12,6 +12,16 @@ mqttEvents.on('message', (topic, message) => {
    if(machineId){
     deviceStatus[machineId] = new Date().toISOString();
   }
+  if(amountReceived == "KBDKReceived"){
+     const spiralStatuses = orders[txn_id].items.map((item) => ({
+        x: item.x,
+        y: item.y,
+        status: 0
+      }));
+      orders[txn_id].status = "pending";
+      orders[txn_id].spiral_statuses = spiralStatuses;
+
+  }
   if(amountReceived=="AmountReceived"){
   console.log('Parsed MQTT message:', { machineId, txn_id, amountReceived });
   console.log('Current', orders);
