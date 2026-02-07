@@ -121,7 +121,7 @@ app.post(
         return res.status(200).json({
           tid: txn_id,
           machine_id: machineId,
-          status: "failed",
+          status: "inactive",
           spiral_statuses: spiralStatuses
         });
       }
@@ -141,14 +141,18 @@ app.get(
     const { txnId } = req.params;
 
     const transaction = orders[txnId];
-
+    sendMessage(`HB/${transaction.machineId}`, `*MVSTATUS?#`);
+   
     if (!transaction) {
       return res.json({
         detail: "Transaction not found"
       });
     }
+    setTimeout(() => {
+     
     const { items, ...transactionWithoutItems } = transaction;
     return res.status(200).json(transactionWithoutItems);
+    }, 2000);
 
 
      
