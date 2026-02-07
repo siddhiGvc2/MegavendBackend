@@ -21,11 +21,11 @@ mqttEvents.on('message', (topic, message) => {
       }));
       console.log('Parsed MQTT message for MVSTATUS:', { machineId: payload[0], txn_id: payload[2], spiralStatuses });
       orders[payload[2]].status =
-  payload[8] === "C"
-    ? "completed"
-    : payload[8] === "P"
-    ? "pending"
-    : "failed";
+      payload[8] === "C"
+        ? "completed"
+        : payload[8] === "P"
+        ? "pending"
+        : "failed";
 
       orders[payload[2]].spiral_statuses = spiralStatuses;
     }
@@ -59,7 +59,7 @@ mqttEvents.on('message', (topic, message) => {
 //   console.log('Updated Order:', orders[txn_id]);
   sendMessage(`HB/${machineId}`, `*SUCCESS#`);
 // build kbd values based on items length
-const kbds = orders[txn_id].items.map(item => `${item.x}${item.y}`);
+const kbds = orders[txn_id]?.items.map(item => `${item.x}${item.y}`);
 
 // join with comma
 const kbdString = kbds.join(',');
