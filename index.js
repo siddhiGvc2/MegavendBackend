@@ -91,13 +91,15 @@ app.post(
         status: 0
       }));
 
+        orders[txn_id].spiral_statuses = spiralStatuses;
+
     setTimeout(() => {
       // simulate spiral results
       console.log('Current Order Status before update:', orders[txn_id]);
       if(orders[txn_id].status == "pending"){
      
       orders[txn_id].status = "pending";
-      orders[txn_id].spiral_statuses = spiralStatuses;
+    
 
       return res.status(200).json({
         tid: txn_id,
