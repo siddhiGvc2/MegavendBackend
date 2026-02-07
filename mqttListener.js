@@ -62,7 +62,7 @@ mqttEvents.on('message', (topic, message) => {
 const kbds = orders[txn_id]?.items.map(item => `${item.x}${item.y}`);
 
 // join with comma
-const kbdString = kbds.join(',');
+const kbdString = kbds?.join(',');
 
 sendMessage(
   `HB/${machineId}`,
