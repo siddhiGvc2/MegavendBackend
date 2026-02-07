@@ -85,16 +85,17 @@ app.post(
     // ==========================
     // ?? SYNC FLOW
     // ==========================
-    setTimeout(() => {
-      // simulate spiral results
-      console.log('Current Order Status before update:', orders[txn_id]);
-      if(orders[txn_id].status == "pending"){
-      const spiralStatuses = items.map((item) => ({
+     const spiralStatuses = items.map((item) => ({
         x: item.x,
         y: item.y,
         status: 0
       }));
 
+    setTimeout(() => {
+      // simulate spiral results
+      console.log('Current Order Status before update:', orders[txn_id]);
+      if(orders[txn_id].status == "pending"){
+     
       orders[txn_id].status = "pending";
       orders[txn_id].spiral_statuses = spiralStatuses;
 
@@ -118,7 +119,8 @@ app.post(
         return res.status(200).json({
           tid: txn_id,
           machine_id: machineId,
-          status: "failed"
+          status: "failed",
+          spiral_statuses: spiralStatuses
         });
       }
       
