@@ -149,9 +149,20 @@ app.get(
       });
     }
     setTimeout(() => {
-     
+     if(!transaction.status == "pending"|| !transaction.status == "completed" || !transaction.status == "failed"){
+       const { items,...transactionWithoutItems } = transaction;
+    
+        return res.status(200).json({
+          tid: txnId,
+          machine_id: transactionWithoutItems.machineId,
+          status: "inactive",
+          spiral_statuses: transactionWithoutItems.spiral_statuses
+        });
+     }
+     else{
     const { items, ...transactionWithoutItems } = transaction;
     return res.status(200).json(transactionWithoutItems);
+     }
     }, 2000);
 
 
