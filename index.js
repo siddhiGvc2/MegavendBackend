@@ -122,7 +122,7 @@ app.post(
         });
       }
       
-    }, 6000);
+    }, 4000);
     // },2000);
   }
   
@@ -168,7 +168,7 @@ app.get(
       status="OFFLINE";
      
     }
-    else {
+    
   return res.json({
     success: true,
     is_online: status == "ONLINE" ? true : false,
@@ -177,13 +177,7 @@ app.get(
   });
 }
 
-     
-
-   
-
-   
-    
-  }
+  
     
   
 );

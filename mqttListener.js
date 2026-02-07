@@ -13,12 +13,12 @@ mqttEvents.on('message', (topic, message) => {
   }
   if(payload[1]=="MVSTATUS"){
     if(orders[payload[2]]){
-         const spiralStatuses = orders[payload[2]].items.map((item,i) => ({
+         const spiralStatuses = orders[payload[2]].items.slice(0, 5).map((item,i) => ({
         x: item.x,
         y: item.y,
         status: payload[i+3] === '1' ? 1 : 0
       }));
-      orders[payload[2]].status = "completed";
+      orders[payload[2]].status = payload[8] || "pending";
       orders[payload[2]].spiral_statuses = spiralStatuses;
     }
   }
