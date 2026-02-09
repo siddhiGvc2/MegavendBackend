@@ -48,11 +48,7 @@ app.post(
     }
 
     // ---- DUPLICATE TXN CHECK ----
-    if (orders[txn_id]) {
-      return res.status(409).json({
-        detail: `Duplicate txn_id: '${txn_id}' already exists. Please use a new, unique txn_id.`
-      });
-    }
+   
 
     // ---- CREATE ORDER ----
     orders[txn_id] = {
@@ -85,13 +81,7 @@ app.post(
     // ==========================
     // ?? SYNC FLOW
     // ==========================
-     const spiralStatuses = items.map((item) => ({
-        x: item.x,
-        y: item.y,
-        status: 0
-      }));
-
-        orders[txn_id].spiral_statuses = spiralStatuses;
+  
 
     setTimeout(() => {
       // simulate spiral results
@@ -112,6 +102,14 @@ app.post(
         status: "pending",
   //      spiral_statuses: spiralStatuses
       });
+      }
+      else if(orders[txn_id].status == "completed"){
+         return res.status(200).json({
+        tid: txn_id, 
+        machine_id: machineId,
+        status: "completed",   
+        spiral_statuses: orders[txn_id].spiral_statuses
+         });
       }
       
       else{

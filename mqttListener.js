@@ -40,9 +40,11 @@ mqttEvents.on('message', (topic, message) => {
   if(amountReceived=="DuplicateIDReceived")
   {
     console.log(`Duplicate txn_id: '${txn_id}' already exists. Please use a new, unique txn_id.`);
+    if(orders[txn_id]){
      orders[txn_id].status = "duplicate";
+    }
   }
-  if(amountReceived == "KBDKReceived"){
+  else if(amountReceived == "KBDKReceived"){
 
     //  orders[payload[2]].status = 'SUCCESS';
      const spiralStatuses = orders[txn_id]?.items.map((item) => ({
@@ -57,7 +59,7 @@ mqttEvents.on('message', (topic, message) => {
       }
 
   }
-  if(amountReceived=="AmountReceived"){
+  else if(amountReceived=="AmountReceived"){
   console.log('Parsed MQTT message:', { machineId, txn_id, amountReceived });
   console.log('Current', orders);
   
@@ -66,18 +68,18 @@ mqttEvents.on('message', (topic, message) => {
 
  
   console.log(`Order ${txn_id} updated to SUCCESS`);
-//   console.log('Updated Order:', orders[txn_id]);
+  //   console.log('Updated Order:', orders[txn_id]);
   sendMessage(`HB/${machineId}`, `*SUCCESS#`);
-// build kbd values based on items length
-const kbds = orders[txn_id]?.items.map(item => `${item.x}${item.y}`);
+    // build kbd values based on items length
+    const kbds = orders[txn_id]?.items.map(item => `${item.x}${item.y}`);
 
-// join with comma
-const kbdString = kbds?.join(',');
+    // join with comma
+    const kbdString = kbds?.join(',');
 
-sendMessage(
-  `HB/${machineId}`,
-  `*KBDK${txn_id},${kbdString}#`
-);
+    sendMessage(
+      `HB/${machineId}`,
+      `*KBDK${txn_id},${kbdString}#`
+    );
   }
 }
 
