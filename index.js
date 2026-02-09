@@ -103,7 +103,6 @@ app.post(
         tid: txn_id,
         machine_id: machineId,
         status: "pending",
-        message:"transactions is under progress",
         estimated_completion_in_seconds: 15*items.length+6
   //      spiral_statuses: spiralStatuses
       });
