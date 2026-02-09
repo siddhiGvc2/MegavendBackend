@@ -96,7 +96,13 @@ app.post(
     setTimeout(() => {
       // simulate spiral results
       console.log('Current Order Status before update:', orders[txn_id]);
-      if(orders[txn_id].status == "pending"){
+
+      if(orders[txn_id].status =='duplicate'){
+         return res.status(409).json({
+        detail: `Duplicate txn_id: '${txn_id}' already exists. Please use a new, unique txn_id.`
+      });
+      }
+      else if(orders[txn_id].status == "pending"){
      
   
 

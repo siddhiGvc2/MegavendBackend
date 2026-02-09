@@ -34,10 +34,14 @@ mqttEvents.on('message', (topic, message) => {
     }
   }
   console.log(payload[0],payload[1],payload[2]);
-  if(payload[2]=="KBDKReceived" || payload[2]=="AmountReceived"){
+  if(payload[2]=="KBDKReceived" || payload[2]=="AmountReceived" || payload[2]=="DuplicateIDReceived"){
   const [machineId, txn_id, amountReceived] = payload;
   console.log('Parsed MQTT message:', { machineId, txn_id, amountReceived });
- 
+  if(amountReceived=="DuplicateIDReceived")
+  {
+    console.log(`Duplicate txn_id: '${txn_id}' already exists. Please use a new, unique txn_id.`);
+     orders[txn_id].status = "duplicate";
+  }
   if(amountReceived == "KBDKReceived"){
 
     //  orders[payload[2]].status = 'SUCCESS';
