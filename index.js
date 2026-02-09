@@ -35,12 +35,14 @@ app.post(
    
     const { txn_id,  items } = req.body;
     let time;
+    console.log(process.env.WAIT_TIME);
     if(process.env.WAIT_TIME == 1){
       time=2000;
     }
     else{
       time=15*items.length +6;
     }
+    console.log(time);
      // time=2000;
       //sendMessage(
       //`HB/${machineId}`,
