@@ -1,9 +1,12 @@
 const express = require("express");
 const app = express();
-const { connectMQTT, sendMessage } = require("./mqtt");
+const dotenv = require("dotenv");
+const { connectMQTT,  sendMessage } = require("./mqtt");
 const {orders,deviceStatus} = require('./orderStore'); // or same file export
 const cors = require('cors');
 require('./mqttListener');
+
+dotenv.config();
 
 app.use(cors('*'));
 app.use(express.json());
@@ -31,6 +34,14 @@ app.post(
     const { machineId } = req.params;
    
     const { txn_id,  items } = req.body;
+    let time;
+    if(process.env.WAIT_TIME == 1){
+      time=2000;
+    }
+    else{
+      time=15*items.length +6;
+    }
+     // time=2000;
       //sendMessage(
       //`HB/${machineId}`,
       //`*FW?#`
@@ -125,7 +136,7 @@ app.post(
         });
       }
       
-    }, 2000); // simulate delay based on items length
+    }, time); // simulate delay based on items length
     // },2000);
   }
   
