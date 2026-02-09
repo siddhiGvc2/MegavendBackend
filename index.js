@@ -141,7 +141,10 @@ app.get(
     const { txnId } = req.params;
 
     const transaction = orders[txnId];
+    if(transaction)
+{
     sendMessage(`HB/${transaction.machineId}`, `*MVSTATUS?#`);
+}
    
     if (!transaction) {
       return res.json({

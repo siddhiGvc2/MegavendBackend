@@ -14,13 +14,15 @@ mqttEvents.on('message', (topic, message) => {
   if(payload[1]=="MVSTATUS"){
     if(orders[payload[2]]){
        console.log('Updating order status for', payload[2]);
-         const spiralStatuses = orders[payload[2]].items.slice(0, 5).map((item,i) => ({
+         const spiralStatuses = orders[payload[2]]?.items.slice(0, 5).map((item,i) => ({
         x: item.x,
         y: item.y,
         status: payload[i+3] === '1' ? 1 : 0
       }));
       console.log('Parsed MQTT message for MVSTATUS:', { machineId: payload[0], txn_id: payload[2], spiralStatuses });
-      orders[payload[2]].status =
+     if(orders[payload[2]])
+{
+    orders[payload[2]].status =
       payload[8] === "C"
         ? "completed"
         : payload[8] === "P"
@@ -28,6 +30,7 @@ mqttEvents.on('message', (topic, message) => {
         : "failed";
 
       orders[payload[2]].spiral_statuses = spiralStatuses;
+}
     }
   }
   console.log(payload[0],payload[1],payload[2]);
@@ -38,13 +41,16 @@ mqttEvents.on('message', (topic, message) => {
   if(amountReceived == "KBDKReceived"){
 
     //  orders[payload[2]].status = 'SUCCESS';
-     const spiralStatuses = orders[txn_id].items.map((item) => ({
+     const spiralStatuses = orders[txn_id]?.items.map((item) => ({
         x: item.x,
         y: item.y,
         status: 0
       }));
+      if(orders[txn_id])
+      {
       orders[txn_id].status = "pending";
       orders[txn_id].spiral_statuses = spiralStatuses;
+      }
 
   }
   if(amountReceived=="AmountReceived"){
