@@ -122,7 +122,7 @@ app.post(
         });
       }
       
-    }, 4000);
+    }, 15000*items.length +6); // simulate delay based on items length
     // },2000);
   }
   
