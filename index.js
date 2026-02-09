@@ -57,7 +57,7 @@ app.post(
     // ---- CREATE ORDER ----
     orders[txn_id] = {
       tid: txn_id,
-      machineId,
+      machine_id:machineId,
       items,
       status: "failed",
       createdAt: new Date(),
@@ -105,7 +105,7 @@ app.post(
         tid: txn_id,
         machine_id: machineId,
         status: "pending",
-        spiral_statuses: spiralStatuses
+  //      spiral_statuses: spiralStatuses
       });
       }
       else if(orders[txn_id].status == "completed")
@@ -114,15 +114,15 @@ app.post(
         tid: txn_id,
         machine_id: machineId,
         status: "completed",
-        spiral_statuses: orders[txn_id].spiral_statuses
+//        spiral_statuses: orders[txn_id].spiral_statuses
          });
         }
       else{
         return res.status(200).json({
           tid: txn_id,
           machine_id: machineId,
-          status: "inactive",
-          spiral_statuses: spiralStatuses
+          status: "failed",
+         // spiral_statuses: spiralStatuses
         });
       }
       
@@ -157,7 +157,7 @@ app.get(
     
         return res.status(200).json({
           tid: txnId,
-          machine_id: transactionWithoutItems.machineId,
+          machine_id: transactionWithoutItems.machine_id,
           status: "inactive",
           spiral_statuses: transactionWithoutItems.spiral_statuses
         });
