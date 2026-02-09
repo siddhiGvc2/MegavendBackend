@@ -52,8 +52,11 @@ mqttEvents.on('message', (topic, message) => {
         y: item.y,
         status: 0
       }));
+      console.log('Parsed MQTT message for KBDKReceived:', { machineId, txn_id, spiralStatuses });
+      console.log('Current Order Status before update:', orders[txn_id]);
       if(orders[txn_id])
       {
+      console.log(`Order ${txn_id} updated to pending`);
       orders[txn_id].status = "pending";
       orders[txn_id].spiral_statuses = spiralStatuses;
       }

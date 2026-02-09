@@ -59,6 +59,7 @@ app.post(
       createdAt: new Date(),
       webhookUrl
     };
+    console.log(orders[txn_id]);
 
     // ---- SEND MQTT VEND COMMAND ----
     sendMessage(
