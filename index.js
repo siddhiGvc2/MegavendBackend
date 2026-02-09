@@ -98,8 +98,7 @@ app.post(
       console.log('Current Order Status before update:', orders[txn_id]);
       if(orders[txn_id].status == "pending"){
      
-      orders[txn_id].status = "pending";
-    
+  
 
       return res.status(200).json({
         tid: txn_id,
@@ -108,15 +107,7 @@ app.post(
   //      spiral_statuses: spiralStatuses
       });
       }
-      else if(orders[txn_id].status == "completed")
-        {
-           return res.status(200).json({
-        tid: txn_id,
-        machine_id: machineId,
-        status: "completed",
-//        spiral_statuses: orders[txn_id].spiral_statuses
-         });
-        }
+      
       else{
         return res.status(200).json({
           tid: txn_id,
@@ -143,7 +134,7 @@ app.get(
     const transaction = orders[txnId];
     if(transaction)
 {
-    sendMessage(`HB/${transaction.machineId}`, `*MVSTATUS?#`);
+    sendMessage(`HB/${transaction.machine_id}`, `*MVSTATUS?#`);
 }
    
     if (!transaction) {
@@ -152,20 +143,15 @@ app.get(
       });
     }
     setTimeout(() => {
-     if(!transaction.status == "pending"|| !transaction.status == "completed" || !transaction.status == "failed"){
-       const { items,...transactionWithoutItems } = transaction;
-    
-        return res.status(200).json({
-          tid: txnId,
-          machine_id: transactionWithoutItems.machine_id,
-          status: "inactive",
-          spiral_statuses: transactionWithoutItems.spiral_statuses
-        });
-     }
-     else{
+      if(orders[txnId].status == "pending"){
+         const { items,spiral_statuses, ...transactionWithoutItems } = transaction;
+          return res.status(200).json(transactionWithoutItems);
+      }
+      else{
     const { items, ...transactionWithoutItems } = transaction;
     return res.status(200).json(transactionWithoutItems);
-     }
+      }
+     
     }, 2000);
 
 
