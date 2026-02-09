@@ -126,7 +126,7 @@ app.post(
         });
       }
       
-    }, 4000); // simulate delay based on items length
+    }, 2000); // simulate delay based on items length
     // },2000);
   }
   
