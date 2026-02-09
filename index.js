@@ -82,6 +82,8 @@ app.post(
     // ==========================
     // ?? SYNC FLOW
     // ==========================
+
+  
   
 
     setTimeout(() => {
@@ -101,6 +103,8 @@ app.post(
         tid: txn_id,
         machine_id: machineId,
         status: "pending",
+        message:"transactions is under progress",
+        estimated_completion_in_seconds: 15*items.length+6
   //      spiral_statuses: spiralStatuses
       });
       }
@@ -122,7 +126,7 @@ app.post(
         });
       }
       
-    }, 15000*items.length +6); // simulate delay based on items length
+    }, 4000); // simulate delay based on items length
     // },2000);
   }
   
