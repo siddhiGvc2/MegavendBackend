@@ -97,18 +97,20 @@ app.post(
     // ==========================
 
     if (process.env.WAIT_TIME == 2) {
-      // Poll until status is completed, failed, or duplicate
+      // Poll until status is completed, failed, or duplicate, with timeout
       const pollInterval = setInterval(() => {
         const currentStatus = orders[txn_id].status;
         console.log('Polling Order Status:', currentStatus);
 
         if (currentStatus === 'duplicate') {
           clearInterval(pollInterval);
+          clearTimeout(timeout);
           return res.status(409).json({
             detail: `Duplicate txn_id: '${txn_id}' already exists. Please use a new, unique txn_id.`
           });
         } else if (currentStatus === 'completed') {
           clearInterval(pollInterval);
+          clearTimeout(timeout);
           return res.status(200).json({
             tid: txn_id,
             machine_id: machineId,
@@ -117,14 +119,26 @@ app.post(
           });
         } else if (currentStatus === 'failed') {
           clearInterval(pollInterval);
+          clearTimeout(timeout);
           return res.status(200).json({
             tid: txn_id,
             machine_id: machineId,
-            status: "failed"
+            status: "failed",
+            spiral_statuses: orders[txn_id].spiral_statuses
           });
         }
         // If still pending, continue polling
       }, 1000); // Poll every 1 second
+
+      // Timeout after calculated time
+      const timeout = setTimeout(() => {
+        clearInterval(pollInterval);
+        return res.status(200).json({
+          tid: txn_id,
+          machine_id: machineId,
+          status: "failed"
+        });
+      }, time);
     } else {
       // Existing timeout logic for other WAIT_TIME values
       setTimeout(() => {
