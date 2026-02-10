@@ -40,7 +40,7 @@ app.post(
       time=2000;
     }
     else{
-      time=15*items.length +6;
+      time=15000*items.length +6;
     }
     console.log(time);
      // time=2000;
@@ -68,7 +68,7 @@ app.post(
       tid: txn_id,
       machine_id:machineId,
       items,
-      status: "failed",
+      status: "",
       createdAt: new Date(),
       webhookUrl
     };
@@ -96,49 +96,68 @@ app.post(
     // ?? SYNC FLOW
     // ==========================
 
-  
-  
+    if (process.env.WAIT_TIME == 2) {
+      // Poll until status is completed, failed, or duplicate
+      const pollInterval = setInterval(() => {
+        const currentStatus = orders[txn_id].status;
+        console.log('Polling Order Status:', currentStatus);
 
-    setTimeout(() => {
-      // simulate spiral results
-      console.log('Current Order Status before update:', orders[txn_id]);
+        if (currentStatus === 'duplicate') {
+          clearInterval(pollInterval);
+          return res.status(409).json({
+            detail: `Duplicate txn_id: '${txn_id}' already exists. Please use a new, unique txn_id.`
+          });
+        } else if (currentStatus === 'completed') {
+          clearInterval(pollInterval);
+          return res.status(200).json({
+            tid: txn_id,
+            machine_id: machineId,
+            status: "completed",
+            spiral_statuses: orders[txn_id].spiral_statuses
+          });
+        } else if (currentStatus === 'failed') {
+          clearInterval(pollInterval);
+          return res.status(200).json({
+            tid: txn_id,
+            machine_id: machineId,
+            status: "failed"
+          });
+        }
+        // If still pending, continue polling
+      }, 1000); // Poll every 1 second
+    } else {
+      // Existing timeout logic for other WAIT_TIME values
+      setTimeout(() => {
+        // simulate spiral results
+        console.log('Current Order Status before update:', orders[txn_id]);
 
-      if(orders[txn_id].status =='duplicate'){
-         return res.status(409).json({
-        detail: `Duplicate txn_id: '${txn_id}' already exists. Please use a new, unique txn_id.`
-      });
-      }
-      else if(orders[txn_id].status == "pending"){
-     
-  
-
-      return res.status(200).json({
-        tid: txn_id,
-        machine_id: machineId,
-        status: "pending",
-        estimated_completion_in_seconds: 15*items.length+6
-  //      spiral_statuses: spiralStatuses
-      });
-      }
-      else if(orders[txn_id].status == "completed"){
-         return res.status(200).json({
-        tid: txn_id, 
-        machine_id: machineId,
-        status: "completed",   
-        spiral_statuses: orders[txn_id].spiral_statuses
-         });
-      }
-      
-      else{
-        return res.status(200).json({
-          tid: txn_id,
-          machine_id: machineId,
-          status: "failed",
-         // spiral_statuses: spiralStatuses
-        });
-      }
-      
-    }, time); // simulate delay based on items length
+        if (orders[txn_id].status === 'duplicate') {
+          return res.status(409).json({
+            detail: `Duplicate txn_id: '${txn_id}' already exists. Please use a new, unique txn_id.`
+          });
+        } else if (orders[txn_id].status === "pending") {
+          return res.status(200).json({
+            tid: txn_id,
+            machine_id: machineId,
+            status: "pending",
+            estimated_completion_in_seconds: 15 * items.length + 6
+          });
+        } else if (orders[txn_id].status === "completed") {
+          return res.status(200).json({
+            tid: txn_id,
+            machine_id: machineId,
+            status: "completed",
+            spiral_statuses: orders[txn_id].spiral_statuses
+          });
+        } else {
+          return res.status(200).json({
+            tid: txn_id,
+            machine_id: machineId,
+            status: "failed"
+          });
+        }
+      }, time); // simulate delay based on items length
+    }
     // },2000);
   }
   
