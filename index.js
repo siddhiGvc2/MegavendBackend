@@ -68,7 +68,7 @@ app.post(
       tid: txn_id,
       machine_id:machineId,
       items,
-      status: "",
+      status: "No Response",
       createdAt: new Date(),
       webhookUrl
     };
@@ -167,7 +167,7 @@ app.post(
           return res.status(200).json({
             tid: txn_id,
             machine_id: machineId,
-            status: "failed"
+            status: "No Response"
           });
         }
       }, time); // simulate delay based on items length
