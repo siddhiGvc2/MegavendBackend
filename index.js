@@ -40,7 +40,7 @@ app.post(
       time=2000;
     }
     else{
-      time=((15000*items.length)+6);
+      time=((15000*items.length)+6000);
     }
     console.log(time);
      // time=2000;
