@@ -28,7 +28,7 @@ mqttEvents.on('message', (topic, message) => {
         : payload[8] === "P"
         ? "pending"
         : payload[8] === "F"
-        ?"failed":"";
+        ? "failed":"No Response";
 
       orders[payload[2]].spiral_statuses = spiralStatuses;
 }

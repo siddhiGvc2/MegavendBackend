@@ -40,7 +40,7 @@ app.post(
       time=2000;
     }
     else{
-      time=15000*items.length +6;
+      time=((15000*items.length)+6);
     }
     console.log(time);
      // time=2000;
@@ -136,7 +136,7 @@ app.post(
         return res.status(200).json({
           tid: txn_id,
           machine_id: machineId,
-          status: "failed"
+          status: "No Response"
         });
       }, time);
     } else {
