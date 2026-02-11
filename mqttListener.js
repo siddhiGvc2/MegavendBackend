@@ -79,11 +79,14 @@ mqttEvents.on('message', (topic, message) => {
 
     // join with comma
     const kbdString = kbds?.join(',');
-
+    if (orders[txn_id]) {
+      
+    
     sendMessage(
       `HB/${machineId}`,
       `*KBDK${txn_id},${kbdString}#`
     );
+  }
   }
 }
 
