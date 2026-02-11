@@ -79,6 +79,7 @@ app.post(
       `HB/${machineId}`,
       `*VEND,${txn_id},PAYTM,${items.length*100},${txn_id}#`
     );
+    var SecondsElapsed = 0;
 
     // ==========================
     // ?? ASYNC (WEBHOOK) FLOW
@@ -101,7 +102,8 @@ app.post(
       const pollInterval = setInterval(() => {
         const currentStatus = orders[txn_id].status;
         console.log('Polling Order Status:', currentStatus);
-
+       SecondsElapsed += 1;
+        
         if (currentStatus === 'duplicate') {
           clearInterval(pollInterval);
           clearTimeout(timeout);
@@ -127,6 +129,21 @@ app.post(
             spiral_statuses: orders[txn_id].spiral_statuses
           });
         }
+
+       if (SecondsElapsed >= 5)
+      {
+          if (currentStatus !== "pending") {
+            clearInterval(pollInterval);
+            clearTimeout(timeout);
+            return res.status(200).json({
+              tid: txn_id,
+              machine_id: machineId,
+              status: "No Response"
+            });
+          }
+        } 
+
+
         // If still pending, continue polling
       }, 1000); // Poll every 1 second
 

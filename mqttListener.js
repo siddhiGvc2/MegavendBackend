@@ -38,6 +38,9 @@ mqttEvents.on('message', (topic, message) => {
   if(payload[2]=="KBDKReceived" || payload[2]=="AmountReceived" || payload[2]=="DuplicateIDReceived"){
   const [machineId, txn_id, amountReceived] = payload;
   console.log('Parsed MQTT message:', { machineId, txn_id, amountReceived });
+
+
+
   if(amountReceived=="DuplicateIDReceived")
   {
     console.log(`Duplicate txn_id: '${txn_id}' already exists. Please use a new, unique txn_id.`);
@@ -66,7 +69,10 @@ mqttEvents.on('message', (topic, message) => {
   else if(amountReceived=="AmountReceived"){
   console.log('Parsed MQTT message:', { machineId, txn_id, amountReceived });
   console.log('Current', orders);
-  
+  if (orders[txn_id])
+  {
+    orders[txn_id].status = "amountReceived";
+  }
   // if (!orders[txn_id]) return;
   // if(orders[txn_id].status === 'SUCCESS') return;
 
